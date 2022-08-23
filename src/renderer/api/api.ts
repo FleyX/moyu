@@ -52,46 +52,48 @@ const axiosPlugin = {
                     }
                     /*eslint-disable indent*/
                     switch (code) {
-                        case 0: //正确请求
-                            break;
-                        case 2006: //输入验证码
-                            break;
-                        case 2003: //验证码错误
-                            break;
-                        case 101005: //无效的的id和密码,跳转到验证页面
-                            break;
-                        case 4101: //登录有错
-                            router.replace("/login");
-                            app.config.globalProperties.$message.warning("暂无权限");
-                            return Promise.reject(new Error("暂无权限"));
-                        case 4100: //登录过期
-                            if (!isExpire) {
-                                isExpire = true;
-                                app.config.globalProperties.$confirm("登录已过期", "提示", {
-                                    confirmButtonText: "跳转登录",
-                                    cancelButtonText: "取消",
-                                    type: "warning",
-                                }).then(() => {
+                    case 0: //正确请求
+                        break;
+                    case 2006: //输入验证码
+                        break;
+                    case 2003: //验证码错误
+                        break;
+                    case 101005: //无效的的id和密码,跳转到验证页面
+                        break;
+                    case 4101: //登录有错
+                        router.replace("/login");
+                        app.config.globalProperties.$message.warning("暂无权限");
+                        return Promise.reject(new Error("暂无权限"));
+                    case 4100: //登录过期
+                        if (!isExpire) {
+                            isExpire = true;
+                            app.config.globalProperties.$confirm("登录已过期", "提示", {
+                                confirmButtonText: "跳转登录",
+                                cancelButtonText: "取消",
+                                type: "warning",
+                            })
+                                .then(() => {
                                     isExpire = false;
                                     sessionStorage.clear();
                                     router.replace("/login");
-                                }).catch(() => {
+                                })
+                                .catch(() => {
                                     isExpire = false;
                                 });
-                            }
-                            return Promise.reject(new Error("登录已过期"));
-                        case 4200: //代理错误
-                            return Promise.reject(new Error(res.data.msg));
-                        case 4002: //暂无权限
-                            app.config.globalProperties.$message.warning(res.data.msg || "暂无权限");
-                            return Promise.reject(new Error(res.data.msg || "暂无权限"));
-                        default:
-                            app.config.globalProperties.$confirm(res.data.msg ? res.data.msg : "操作失败", "提示", {
-                                confirmButtonText: "确定",
-                                showCancelButton: false,
-                                type: "warning",
-                            });
-                            return Promise.reject(new Error(res.data.msg));
+                        }
+                        return Promise.reject(new Error("登录已过期"));
+                    case 4200: //代理错误
+                        return Promise.reject(new Error(res.data.msg));
+                    case 4002: //暂无权限
+                        app.config.globalProperties.$message.warning(res.data.msg || "暂无权限");
+                        return Promise.reject(new Error(res.data.msg || "暂无权限"));
+                    default:
+                        app.config.globalProperties.$confirm(res.data.msg ? res.data.msg : "操作失败", "提示", {
+                            confirmButtonText: "确定",
+                            showCancelButton: false,
+                            type: "warning",
+                        });
+                        return Promise.reject(new Error(res.data.msg));
                     }
                     return result;
                 }
@@ -126,4 +128,10 @@ const axiosPlugin = {
     },
 }
 
-export { axiosPlugin, axiosInstance as axios };
+function changeBaseUrl(url: string): void {
+    if (url && url.length > 0) {
+        axiosInstance.defaults.baseURL = url;
+    }
+}
+
+export { axiosPlugin, axiosInstance as axios, changeBaseUrl };

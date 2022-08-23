@@ -1,8 +1,8 @@
 /*
-    创建者：shuxiaokai
-    创建时间：2021-06-10 21:39
-    模块名称：登录模块
-    备注：
+创建者：shuxiaokai
+创建时间：2021-06-10 21:39
+模块名称：登录模块
+备注：
 */
 <template>
     <div class="login-container d-flex a-center j-center">
@@ -42,7 +42,9 @@
                 <el-tabs v-model="activeName" class="w-100">
                     <!-- 账号登录 -->
                     <el-tab-pane :label="$t('账号登录')" name="loginAccount">
-                        <s-login-account @jumpToRegister="handleJumpToRegister" @jumpToResetPassword="handleJumpToResetPassword"></s-login-account>
+                        <s-login-account @jumpToRegister="handleJumpToRegister"
+                                         @jumpToResetPassword="handleJumpToResetPassword"
+                        ></s-login-account>
                     </el-tab-pane>
                     <!-- 手机号登录 -->
                     <el-tab-pane v-if="0" :label="$t('手机登录')" name="loginPassword">
@@ -56,6 +58,10 @@
                     <el-tab-pane :label="$t('忘记密码')" name="reset">
                         <s-reset-password @jumpToLogin="handleJumpToLogin"></s-reset-password>
                     </el-tab-pane>
+                    <!-- 服务端配置 -->
+                    <el-tab-pane :label="$t('服务端配置')" name="config">
+                        <server-config />
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </div>
@@ -65,6 +71,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import config from "@/../config/config"
+import serverConfig from "@/pages/login/components/server-config.vue";
 import loginAccount from "./components/login-account.vue";
 import loginPhone from "./components/login-phone.vue";
 import register from "./components/register.vue";
@@ -76,6 +83,7 @@ export default defineComponent({
         "s-login-phone": loginPhone,
         "s-register": register,
         "s-reset-password": resetPassword,
+        serverConfig
     },
     data() {
         return {
@@ -105,43 +113,53 @@ export default defineComponent({
     width: 100vw;
     height: 100vh;
     background: $gray-200;
+
     .login-box {
         height: size(550);
         width: size(960);
         background: $white;
         box-shadow: $box-shadow-base;
         border-radius: $border-radius-base;
+
         .left {
             flex: 0 0 50%;
             position: relative;
+
             .download-wrap {
                 width: 70%;
                 display: flex;
                 align-items: center;
                 justify-content: space-around;
+
                 .iconfont {
                     font-size: fz(30);
                 }
+
                 .svg-icon {
                     width: size(32);
                     height: size(32);
                 }
+
                 a {
                     text-decoration: none;
                 }
             }
+
             .featrue {
                 margin-top: size(25);
                 margin-left: 10%;
-                &>li {
+
+                & > li {
                     margin-bottom: size(10);
                     font-size: fz(15);
                 }
             }
-            .el-carousel__item,.item-wrap {
+
+            .el-carousel__item, .item-wrap {
                 height: size(340);
             }
         }
+
         .right {
             flex: 1;
             display: flex;
@@ -149,12 +167,15 @@ export default defineComponent({
             padding: 0 size(40);
             position: relative;
             height: 100%;
-            &>h2 {
+
+            & > h2 {
                 margin-top: size(20);
             }
+
             .captcha {
                 display: flex;
-                &>img {
+
+                & > img {
                     width: size(200);
                     height: size(40);
                 }

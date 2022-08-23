@@ -12,6 +12,7 @@ if (typeof window !== "undefined" && window.require) {
 }
 
 const isDev = process.env.NODE_ENV === "development";
+
 function isElectron(): boolean {
     if (typeof window !== "undefined" && typeof window.process === "object" && window.process.type === "renderer") {
         return true;
@@ -24,6 +25,7 @@ function isElectron(): boolean {
     }
     return false;
 }
+
 const config: Config = {
     ip,
     isElectron: isElectron(),
@@ -46,7 +48,8 @@ const config: Config = {
         },
         //http请求相关
         httpRequest: {
-            url: isDev ? "http://127.0.0.1:7004" : "https://online.jobtool.cn",
+            // eslint-disable-next-line no-nested-ternary
+            url: isDev ? "http://127.0.0.1:7004" : (process.env.REMOTE_URL ? process.env.REMOTE_URL : "https://online.jobtool.cn"),
             imgUrl: isDev ? "http://happymoyu.oss-cn-beijing.aliyuncs.com" : "http://happymoyu.oss-cn-beijing.aliyuncs.com",
             timeout: 20000,
             withCredentials: true,
